@@ -18,6 +18,45 @@
             --border-glass: rgba(255, 255, 255, 0.1);
         }
 
+       .site-logo {
+    height: 50px; /* Adjust size as needed */
+    width: auto;
+    margin-right: 15px;
+    vertical-align: middle;
+    filter: drop-shadow(0 0 8px rgba(243, 156, 18, 0.4));
+    transition: transform 0.3s ease;
+}
+
+.site-logo:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Container for the logo inside the nav */
+.nav-brand {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    left: 20px;
+}
+
+/* Adjust nav for mobile responsiveness */
+nav {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .nav-brand {
+        position: static;
+        margin-bottom: 10px;
+    }
+    nav {
+        flex-direction: column;
+    }
+}
+        
         body, html {
             margin: 0;
             padding: 0;
@@ -278,11 +317,14 @@
 
     <div class="container">
         <nav>
-            <button id="btn-home" onclick="switchPage('home')">Home</button>
-            <button id="btn-projects" onclick="switchPage('projects')">Projects</button>
-            <button id="btn-members" onclick="switchPage('members')">Members</button>
-        </nav>
-
+    <div class="nav-brand">
+        <img src="https://files.catbox.moe/dxgwys.webp" alt="Brewery Inc Logo" class="site-logo">
+        <span style="font-weight: 800; letter-spacing: 1px; color: var(--primary);">BREWERY INC</span>
+    </div>
+    <button id="btn-home" onclick="switchPage('home')">Home</button>
+    <button id="btn-projects" onclick="switchPage('projects')">Projects</button>
+    <button id="btn-members" onclick="switchPage('members')">Members</button>
+</nav>
         <main>
             <section id="home" class="page">
                 <div class="card">
