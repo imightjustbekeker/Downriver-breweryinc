@@ -1,401 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" type="image/webp" href="https://files.catbox.moe/dxgwys.webp">
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Brewery Inc | Downriver">
-<meta property="og:description" content="The best beer makers on Downriver. View our live player count, active projects, and member roster.">
-<meta property="og:url" content="https://brewery-inc.com"> <meta property="og:image" content="https://files.catbox.moe/g6yam3.webp">
-<meta name="theme-color" content="#f39c12">
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brewery Inc | Downriver</title>
+    <link rel="icon" type="image/webp" href="https://files.catbox.moe/dxgwys.webp">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --primary: #f39c12; /* Beer/gold theme color */
+            --primary: #f39c12;
             --bg-glass: rgba(15, 15, 20, 0.7);
             --border-glass: rgba(255, 255, 255, 0.1);
         }
 
-       .site-logo {
-    height: 50px; /* Adjust size as needed */
-    width: auto;
-    margin-right: 15px;
-    vertical-align: middle;
-    filter: drop-shadow(0 0 8px rgba(243, 156, 18, 0.4));
-    transition: transform 0.3s ease;
-}
-
-.site-logo:hover {
-    transform: scale(1.1) rotate(5deg);
-}
-
-/* Container for the logo inside the nav */
-.nav-brand {
-    display: flex;
-    align-items: center;
-    position: absolute;
-    left: 20px;
-}
-
-/* Adjust nav for mobile responsiveness */
-nav {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-@media (max-width: 768px) {
-    .nav-brand {
-        position: static;
-        margin-bottom: 10px;
-    }
-    nav {
-        flex-direction: column;
-    }
-}
-        
         body, html {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             font-family: 'Inter', sans-serif;
             color: #fff;
             height: 100vh;
             overflow: hidden;
+            background-color: #000;
             background-image: url('https://files.catbox.moe/b1dp6i.png');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
         }
 
-        /* Seamless Dark Overlay */
-        .overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 100%);
-            z-index: 0;
-        }
-
-        .container {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        /* Advanced Navigation */
-        nav {
+        /* Cinematic Intro Loader */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #0a0a0c;
+            z-index: 10000;
             display: flex;
             justify-content: center;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-glass);
-            flex-wrap: wrap;
-            gap: 10px;
+            align-items: center;
+            transition: opacity 1s ease, visibility 1s;
         }
+
+        .intro-logo {
+            width: 60vw;
+            height: auto;
+            filter: drop-shadow(0 0 30px rgba(243, 156, 18, 0.5));
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s;
+        }
+
+        .entry-btn {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 5px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        .entry-btn:hover {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        .logo-shrink-final { transform: scale(0); opacity: 0; }
+        .loader-fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
+
+        /* Navigation & Layout */
+        .overlay { position: fixed; inset: 0; background: linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 100%); z-index: 0; }
+        .container { position: relative; z-index: 1; display: flex; flex-direction: column; height: 100vh; }
+
+        nav {
+            display: flex; justify-content: center; align-items: center;
+            padding: 20px; background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-glass);
+        }
+
+        .nav-brand { display: flex; align-items: center; position: absolute; left: 20px; }
+        .site-logo { height: 40px; margin-right: 10px; image-rendering: pixelated; }
 
         nav button {
-            background: none;
-            border: none;
-            color: #aaa;
-            font-size: 1.1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.3s ease;
-            padding: 10px 20px;
-            border-radius: 8px;
-        }
-
-        nav button:hover {
-            color: #fff;
-            background: rgba(255, 255, 255, 0.1);
+            background: none; border: none; color: #aaa; font-size: 1rem;
+            font-weight: 500; margin: 0 10px; cursor: pointer; padding: 10px 15px;
+            transition: 0.3s; border-radius: 8px;
         }
 
         nav button.active {
-            color: var(--primary);
-            background: rgba(243, 156, 18, 0.15);
+            color: var(--primary); background: rgba(243, 156, 18, 0.15);
             border: 1px solid rgba(243, 156, 18, 0.3);
         }
 
-        /* Page Content Area */
-        main {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            overflow-y: auto;
-        }
+        main { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
+        .page { display: none; width: 100%; max-width: 1100px; animation: fadeIn 0.5s ease; }
+        .page.active { display: block; }
 
-        .page {
-            display: none;
-            width: 100%;
-            max-width: 900px;
-            animation: fadeIn 0.4s ease-out forwards;
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .page.active {
-            display: block;
-        }
+        .card { background: var(--bg-glass); backdrop-filter: blur(15px); border: 1px solid var(--border-glass); border-radius: 16px; padding: 30px; text-align: center; }
+        .tagline { color: #888; margin-bottom: 20px; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* Projects Grid */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; text-align: left; margin-top: 20px; }
+        .project-item { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 12px; border-left: 4px solid var(--primary); }
+        .status { font-size: 0.7rem; text-transform: uppercase; color: var(--primary); font-weight: 800; }
 
-        /* Glassmorphism Cards */
-        .card {
-            background: var(--bg-glass);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--border-glass);
-            border-radius: 16px;
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        /* Custom Scrollbar for Card */
-        .card::-webkit-scrollbar {
-            width: 8px;
-        }
-        .card::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.2);
-            border-radius: 8px;
-        }
-        .card::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 8px;
-        }
-
-        h1 {
-            font-size: 3rem;
-            margin: 0 0 10px 0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-        }
-
-        .tagline {
-            font-size: 1.2rem;
-            color: #ccc;
-            margin-bottom: 30px;
-            font-weight: 300;
-        }
-
-        /* Player Count Widget */
-        .player-count {
-            display: inline-block;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 15px 30px;
-            border-radius: 50px;
-            border: 1px solid var(--primary);
-            font-size: 1.5rem;
-            font-weight: 800;
-            margin-bottom: 30px;
-            box-shadow: 0 0 15px rgba(243, 156, 18, 0.2);
-        }
-
-        .player-count span {
-            color: var(--primary);
-        }
-
-        /* Coordinates Grid */
-        .coords-grid {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .coord-box {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 15px 25px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .coord-box h3 {
-            margin: 0 0 5px 0;
-            font-size: 1rem;
-            color: var(--primary);
-        }
-
-        .coord-box p {
-            margin: 0;
-            font-family: monospace;
-            font-size: 1.1rem;
-        }
-
-        /* Projects List */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            text-align: left;
-        }
-
-        .project-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 12px;
-            border-left: 4px solid var(--primary);
-            transition: transform 0.2s ease;
-        }
-
-        .project-item:hover {
-            transform: scale(1.02);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .project-item h3 {
-            margin: 0 0 10px 0;
-            color: #fff;
-        }
-
-        .status {
-            font-size: 0.85rem;
-            color: #a8ffa8; /* Active green */
-            text-transform: uppercase;
-            font-weight: 800;
-            letter-spacing: 1px;
-        }
-#loader {
-    position: fixed;
-    inset: 0;
-    background: #0a0a0c; /* Deep black background for the intro */
-    z-index: 10000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    transition: opacity 1s ease;
-}
-
-.intro-logo {
-    width: 60vw; /* 60% of the website width */
-    height: auto;
-    filter: drop-shadow(0 0 30px rgba(243, 156, 18, 0.5));
-    animation: shrink-intro 6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-@keyframes shrink-intro {
-    0% {
-        transform: scale(1);
-        opacity: 0;
-    }
-    15% {
-        opacity: 1; /* Fade in quickly at the start */
-    }
-    90% {
-        transform: scale(0.1); /* Shrink down towards nav size */
-        opacity: 1;
-    }
-    100% {
-        transform: scale(0); /* Vanish as the loader fades */
-        opacity: 0;
-    }
-}
-
-.loader-fade-out {
-    opacity: 0;
-    pointer-events: none;
-}
         /* Members Grid */
-        .members-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .member-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px 10px;
-            border-radius: 12px;
-            border: 1px solid var(--border-glass);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: transform 0.2s ease, background 0.2s ease;
-        }
-
-        .member-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--primary);
-        }
-
-        .member-avatar {
-            width: 64px;
-            height: 64px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            image-rendering: pixelated; /* Keeps the head sharp */
-        }
-
-        .member-card h3 {
-            margin: 0;
-            font-size: 0.95rem;
-            color: #fff;
-            word-wrap: break-word;
-            text-align: center;
-            width: 100%;
-        }
+        .members-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin-top: 20px; }
+        .member-card { background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; border: 1px solid transparent; transition: 0.3s; }
+        .member-card:hover { border-color: var(--primary); background: rgba(255, 255, 255, 0.1); }
+        .member-avatar { width: 64px; height: 64px; image-rendering: pixelated; margin-bottom: 10px; border-radius: 4px; }
     </style>
 </head>
 <body>
-    
+
     <div id="loader">
-    <div class="intro-container" style="text-align: center;">
-        <img src="https://files.catbox.moe/dxgwys.webp" alt="Brewery Inc" class="intro-logo" id="logo-main">
-        <div id="entry-zone" style="opacity: 0; transition: opacity 1s; margin-top: -10vh;">
-            <button onclick="startBrewery()" class="entry-btn">ENTER BREWERY</button>
+        <div style="text-align: center;">
+            <img src="https://files.catbox.moe/dxgwys.webp" alt="Logo" class="intro-logo" id="logo-main">
+            <div id="entry-zone" style="opacity: 0; transition: opacity 1s;">
+                <button onclick="startBrewery()" class="entry-btn">ENTER BREWERY</button>
+            </div>
         </div>
     </div>
-</div>
 
-<audio id="beerSound" src="https://www.myinstants.com/media/sounds/beer-can-opening-sound-effect.mp3"></audio>
-</div>
+    <audio id="beerSound" src="https://www.myinstants.com/media/sounds/beer-can-opening-sound-effect.mp3"></audio>
+
+    <div class="overlay"></div>
+
     <div class="container">
         <nav>
-    <div class="nav-brand">
-        <img src="https://files.catbox.moe/dxgwys.webp" alt="Brewery Inc Logo" class="site-logo">
-        <span style="font-weight: 800; letter-spacing: 1px; color: var(--primary);">BREWERY INC</span>
-    </div>
-    <button id="btn-home" onclick="switchPage('home')">Home</button>
-    <button id="btn-projects" onclick="switchPage('projects')">Projects</button>
-    <button id="btn-members" onclick="switchPage('members')">Members</button>
-    <button id="btn-map" onclick="switchPage('map')">Server Map</button>
-</nav>
+            <div class="nav-brand">
+                <img src="https://files.catbox.moe/dxgwys.webp" alt="Logo" class="site-logo">
+                <span style="font-weight: 800; color: var(--primary); letter-spacing: 1px;">BREWERY INC</span>
+            </div>
+            <button id="btn-home" onclick="switchPage('home')">Home</button>
+            <button id="btn-projects" onclick="switchPage('projects')">Projects</button>
+            <button id="btn-members" onclick="switchPage('members')">Members</button>
+            <button id="btn-map" onclick="switchPage('map')">Map</button>
+        </nav>
+
         <main>
             <section id="home" class="page">
                 <div class="card">
                     <h1>Brewery Inc</h1>
-                    <div class="tagline">The best beer makers on downriver</div>
-                    
-                    <div class="player-count" id="server-status">
-                        Server Players: <span id="player-number">Loading...</span>
-                    </div>
-
-                    <div class="coords-grid">
-                        <div class="coord-box">
-                            <h3>Main Base</h3>
-                            <p>X: 3262 | Y: 71 | Z: 3599</p>
-                        </div>
-                        <div class="coord-box">
-                            <h3>Nether Portal</h3>
-                            <p>X: 381 | Z: 504</p>
-                        </div>
-                    </div>
+                    <div class="tagline">The best beer makers on Downriver</div>
+                    <div id="player-status" style="font-size: 1.5rem; font-weight: 800; color: var(--primary); margin: 20px 0;">Loading Server Info...</div>
+                    <p style="font-family: monospace; color: #888;">IP: 66.59.210.161</p>
                 </div>
             </section>
 
@@ -403,33 +155,12 @@ nav {
                 <div class="card">
                     <h1>Active Projects</h1>
                     <div class="tagline">Building the future of Brewery Inc</div>
-                    
                     <div class="projects-grid">
-                        <div class="project-item">
-                            <span class="status">In Progress</span>
-                            <h3>Bonemeal Farm</h3>
-                            <p>Automated bone blocks and fertilizer production.</p>
-                        </div>
-                        <div class="project-item">
-                            <span class="status">In Progress</span>
-                            <h3>Snowman Farm</h3>
-                            <p>Infinite snow collection systems.</p>
-                        </div>
-                        <div class="project-item">
-                            <span class="status">Ongoing</span>
-                            <h3>Gear Distribution</h3>
-                            <p>Supplying maxed-out gear to all team members.</p>
-                        </div>
-                        <div class="project-item">
-                            <span class="status">In Progress</span>
-                            <h3>Shulker Farm</h3>
-                            <p>Securing infinite storage capabilities.</p>
-                        </div>
-                        <div class="project-item">
-                            <span class="status">Massive Build</span>
-                            <h3>The City Itself</h3>
-                            <p>The Great City yeah idk what to put in here.</p>
-                        </div>
+                        <div class="project-item"><span class="status">In Progress</span><h3>Bonemeal Farm</h3><p>Automated bone blocks and fertilizer production.</p></div>
+                        <div class="project-item"><span class="status">In Progress</span><h3>Snowman Farm</h3><p>Infinite snow collection systems.</p></div>
+                        <div class="project-item"><span class="status">Ongoing</span><h3>Gear Distribution</h3><p>Supplying maxed-out gear to all team members.</p></div>
+                        <div class="project-item"><span class="status">In Progress</span><h3>Shulker Farm</h3><p>Securing infinite storage capabilities.</p></div>
+                        <div class="project-item"><span class="status">Massive Build</span><h3>The City Itself</h3><p>The Great City yeah idk what to put in here.</p></div>
                     </div>
                 </div>
             </section>
@@ -438,147 +169,105 @@ nav {
                 <div class="card">
                     <h1>The Team</h1>
                     <div class="tagline">The Members Apart Brewery Inc</div>
-                    
                     <div class="members-grid">
-                        <div class="member-card"><img src="https://minotar.net/helm/returnmetokai/64.png" alt="RMTK" class="member-avatar"><h3>RMTK</h3></div>
-                        <div class="member-card"><img src="https://minotar.net/helm/shynbug/64.png" alt="Shynbug" class="member-avatar"><h3>shynbug</h3></div>
-                        <div class="member-card"><img src="https://minotar.net/helm/ghgddcfu/64.png" alt="ghgddcfu" class="member-avatar"><h3>Alex</h3></div>
-                        <div class="member-card"><img src="https://minotar.net/helm/theholyjesus/64.png" alt="theholyjesus" class="member-avatar"><h3>Jesus</h3></div>
-                        <div class="member-card"><img src="https://minotar.net/helm/PBJosh/64.png" alt="PBJosh" class="member-avatar"><h3>Josh</h3></div>
-                        <div class="member-card"><img src="https://minotar.net/helm/Lwck/64.png" alt="Lwck" class="member-avatar"><h3>Lwck</h3></div>
-                        <div class="member-card"><img src="https://minotar.net/helm/Andru_With_A_U_/64.png" alt="Andru" class="member-avatar"><h3>Andru</h3></div>
-                        <div class="member-card"><img src="https://minotar.net/helm/Gothfemboykai/64.png" alt="Gothfemboykai" class="member-avatar"><h3>kai</h3></div>
-                        <div class="member-card"><img src="https://minotar.net/helm/Marsigold/64.png" alt="Marsigold" class="member-avatar"><h3>Marsi</h3></div>
-                        <div class="member-card"><img src="https://minotar.net/helm/knotneck/64.png" alt="knotkneck" class="member-avatar"><h3>knotneck</h3></div>
-                        <div class="member-card"><img src="https://minotar.net/helm/Mr_Lagsalot/64.png" alt="lagsalot" class="member-avatar"><h3>Lagsalot</h3></div>
-                        <div class="member-card"><img src="https://minotar.net/helm/gay4urmom/64.png" alt="gay4urmom" class="member-avatar"><h3>gay4urmom</h3></div>
-                        <div class="member-card"><img src="https://minotar.net/helm/Andyx4/64.png" alt="Andyx4" class="member-avatar"><h3>Andy</h3></div>
-                        <div class="member-card"><img src="https://minotar.net/helm/Prometheus321/64.png" alt="Prometheous321" class="member-avatar"><h3>Prometheous</h3></div>
+                        <div class="member-card"><img src="https://minotar.net/helm/returnmetokai/64.png" class="member-avatar"><h3>RMTK</h3></div>
+                        <div class="member-card"><img src="https://minotar.net/helm/shynbug/64.png" class="member-avatar"><h3>shynbug</h3></div>
+                        <div class="member-card"><img src="https://minotar.net/helm/ghgddcfu/64.png" class="member-avatar"><h3>Alex</h3></div>
+                        <div class="member-card"><img src="https://minotar.net/helm/theholyjesus/64.png" class="member-avatar"><h3>Jesus</h3></div>
+                        <div class="member-card"><img src="https://minotar.net/helm/PBJosh/64.png" class="member-avatar"><h3>Josh</h3></div>
+                        <div class="member-card"><img src="https://minotar.net/helm/Lwck/64.png" class="member-avatar"><h3>Lwck</h3></div>
+                        <div class="member-card"><img src="https://minotar.net/helm/Andru_With_A_U_/64.png" class="member-avatar"><h3>Andru</h3></div>
+                        <div class="member-card"><img src="https://minotar.net/helm/Gothfemboykai/64.png" class="member-avatar"><h3>kai</h3></div>
+                        <div class="member-card"><img src="https://minotar.net/helm/Marsigold/64.png" class="member-avatar"><h3>Marsi</h3></div>
+                        <div class="member-card"><img src="https://minotar.net/helm/knotneck/64.png" class="member-avatar"><h3>knotneck</h3></div>
+                        <div class="member-card"><img src="https://minotar.net/helm/Mr_Lagsalot/64.png" class="member-avatar"><h3>Lagsalot</h3></div>
+                        <div class="member-card"><img src="https://minotar.net/helm/gay4urmom/64.png" class="member-avatar"><h3>gay4urmom</h3></div>
+                        <div class="member-card"><img src="https://minotar.net/helm/Andyx4/64.png" class="member-avatar"><h3>Andy</h3></div>
+                        <div class="member-card"><img src="https://minotar.net/helm/Prometheus321/64.png" class="member-avatar"><h3>Prometheous</h3></div>
                     </div>
                 </div>
             </section>
+
+            <section id="map" class="page">
+                <div class="card" style="padding: 15px; height: 80vh; display: flex; flex-direction: column;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 10px;">
+                        <div>
+                            <h1 style="font-size: 1.8rem; margin: 0;">Map of base</h1>
+                            <div id="real-time" style="font-size: 0.75rem; color: #888; font-family: monospace; letter-spacing: 1px;">00:00:00 AM</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div id="server-time-display" style="font-size: 0.9rem; color: var(--primary); font-family: monospace; font-weight: 800;">SYNCING WORLD TIME...</div>
+                            <div style="font-size: 0.7rem; color: #888;">X: 3175 | Y: 64 | Z: 4071</div>
+                        </div>
+                    </div>
+                    <iframe 
+                        src="https://map.downriversmp.cc/?worldname=world&mapname=flat&zoom=5&x=3175&y=64&z=4071" 
+                        style="width: 100%; flex-grow: 1; border: 1px solid var(--border-glass); border-radius: 12px; background: #0b0b0d;" 
+                        id="dynmap-frame">
+                    </iframe>
+                </div>
+            </section>
         </main>
- <section id="map" class="page">
-    <div class="card" style="padding: 15px; height: 80vh; max-width: 1100px; display: flex; flex-direction: column;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 10px;">
-            <h1 style="font-size: 1.8rem; margin: 0;">Map of base</h1>
-            <div style="text-align: right;">
-                <div style="font-size: 0.9rem; color: var(--primary); font-family: monospace;">TARGET: BREWERY INC</div>
-                <div style="font-size: 0.7rem; color: #888;">X: 3175 | Y: 64 | Z: 4071</div>
-            </div>
-        </div>
-        
-        <iframe 
-            src="https://map.downriversmp.cc/?worldname=world&mapname=flat&zoom=5&x=3175&y=64&z=4071" 
-            style="width: 100%; flex-grow: 1; border: 1px solid var(--border-glass); border-radius: 12px; background: #0b0b0d;"
-            id="dynmap-frame"
-            title="Brewery Inc Base Map">
-        </iframe>
-    </div>
-</section>
     </div>
 
     <script>
-        const serverIP = "66.59.210.161";
+        function setCookie(n, v) { document.cookie = n + "=" + v + ";path=/;max-age=604800"; }
+        function getCookie(n) { const v = document.cookie.match('(^|;) ?' + n + '=([^;]*)(;|$)'); return v ? v[2] : null; }
 
-        // Fetch live player count from MC Server API
-        async function fetchPlayerCount() {
-            try {
-                const response = await fetch(`https://api.mcsrvstat.us/3/${serverIP}`);
-                const data = await response.json();
-                
-                const countElement = document.getElementById('player-number');
-                if (data.online) {
-                    countElement.innerText = `${data.players.online} / ${data.players.max}`;
-                } else {
-                    countElement.innerText = "Offline";
-                    countElement.style.color = "#ff4c4c";
-                }
-            } catch (error) {
-                document.getElementById('player-number').innerText = "API Error";
+        function switchPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+            const target = document.getElementById(id);
+            if(target) {
+                target.classList.add('active');
+                document.getElementById('btn-' + id).classList.add('active');
+                setCookie('tag', id);
             }
         }
 
-        // Cookie Management
-        function setCookie(name, value, days) {
-            let expires = "";
-            if (days) {
-                const date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                expires = "; expires=" + date.toUTCString();
-            }
-            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        function startBrewery() {
+            document.getElementById('beerSound').play();
+            document.getElementById('logo-main').classList.add('logo-shrink-final');
+            document.getElementById('entry-zone').style.opacity = "0";
+            setTimeout(() => { 
+                document.getElementById('loader').classList.add('loader-fade-out'); 
+            }, 1000);
         }
 
-        function getCookie(name) {
-            const nameEQ = name + "=";
-            const ca = document.cookie.split(';');
-            for(let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-            }
-            return null;
+        function updateClocks() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            if(document.getElementById('real-time')) document.getElementById('real-time').innerText = "LOCAL TIME: " + timeString;
+
+            fetch('https://map.downriversmp.cc/standalone/dynmap_world.json')
+                .then(r => r.json())
+                .then(data => {
+                    const serverTime = data.servertime; 
+                    let hours = Math.floor((serverTime / 1000 + 6) % 24);
+                    let minutes = Math.floor((serverTime % 1000) * 60 / 1000);
+                    let ampm = hours >= 12 ? 'PM' : 'AM';
+                    hours = hours % 12 || 12;
+                    const mcClock = hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ' ' + ampm;
+                    const isNight = (serverTime > 13000 && serverTime < 23000);
+                    const status = isNight ? "🌙 NIGHT" : "☀️ DAY";
+                    const display = document.getElementById('server-time-display');
+                    if(display) {
+                        display.innerText = `IN-GAME: ${mcClock} (${status})`;
+                        display.style.color = isNight ? "#9b59b6" : "#f39c12";
+                    }
+                }).catch(() => {
+                    if(document.getElementById('server-time-display')) document.getElementById('server-time-display').innerText = "LIVE MAP ACTIVE";
+                });
         }
 
-        // Seamless Tab Switching
-        function switchPage(pageId) {
-            // Hide all pages
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            // Deselect all buttons
-            document.querySelectorAll('nav button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-
-            // Show selected page
-            document.getElementById(pageId).classList.add('active');
-            document.getElementById('btn-' + pageId).classList.add('active');
-
-            // Save the tag
-            setCookie('activePageTag', pageId, 7);
-        }
-
-        // Initialization
         window.onload = () => {
-            fetchPlayerCount();
-            // Refresh player count every 60 seconds
-            setInterval(fetchPlayerCount, 60000);
-
-            // Load saved tab state
-            const savedPage = getCookie('activePageTag') || 'home';
-            switchPage(savedPage);
+            fetch('https://api.mcsrvstat.us/3/66.59.210.161').then(r => r.json()).then(d => {
+                document.getElementById('player-status').innerText = d.online ? `ONLINE: ${d.players.online}/${d.players.max}` : "SERVER OFFLINE";
+            });
+            setTimeout(() => { document.getElementById('entry-zone').style.opacity = "1"; }, 4000);
+            switchPage(getCookie('tag') || 'home');
+            setInterval(updateClocks, 1000);
         };
-        
-      window.addEventListener('load', () => {
-    // Show the "Enter" button after 4.5 seconds of the logo being big
-    setTimeout(() => {
-        document.getElementById('entry-zone').style.opacity = "1";
-    }, 4500);
-});
-
-function startBrewery() {
-    const audio = document.getElementById('beerSound');
-    const loader = document.getElementById('loader');
-    const logo = document.getElementById('logo-main');
-    const entryBtn = document.getElementById('entry-zone');
-
-    // 1. Play the Beer Sound
-    audio.play();
-
-    // 2. Hide the button immediately
-    entryBtn.style.opacity = "0";
-
-    // 3. Trigger the final shrink
-    logo.classList.add('logo-shrink-final');
-
-    // 4. Fade out the whole screen
-    setTimeout(() => {
-        loader.classList.add('loader-fade-out');
-        setTimeout(() => { loader.remove(); }, 1000);
-    }, 1000);
-}
     </script>
 </body>
 </html>
