@@ -20,13 +20,13 @@
             color: #fff;
             height: 100vh;
             overflow: hidden;
-            background-color: #000;
+            background-color: #0a0a0c;
             background-image: url('https://files.catbox.moe/b1dp6i.png');
             background-size: cover;
             background-position: center;
         }
 
-        /* Cinematic Intro Loader */
+        /* --- AUTOMATIC CINEMATIC LOADER --- */
         #loader {
             position: fixed;
             inset: 0;
@@ -40,36 +40,27 @@
 
         .intro-logo {
             width: 60vw;
+            max-width: 600px;
             height: auto;
             filter: drop-shadow(0 0 30px rgba(243, 156, 18, 0.5));
-            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s;
+            /* The 6s shrink animation you wanted */
+            animation: autoShrink 6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
-        .entry-btn {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            font-weight: 800;
-            letter-spacing: 5px;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            transition: 0.3s;
-            border-radius: 4px;
-            margin-top: 20px;
+        @keyframes autoShrink {
+            0% { transform: scale(1); opacity: 0; }
+            10% { opacity: 1; }
+            80% { transform: scale(0.6); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
         }
 
-        .entry-btn:hover {
-            background: var(--primary);
-            color: #000;
-            box-shadow: 0 0 20px var(--primary);
+        .loader-fade-out { 
+            opacity: 0 !important; 
+            visibility: hidden !important; 
+            pointer-events: none !important; 
         }
 
-        .logo-shrink-final { transform: scale(0); opacity: 0; }
-        .loader-fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
-
-        /* Navigation & Layout */
+        /* --- MAIN SITE --- */
         .overlay { position: fixed; inset: 0; background: linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 100%); z-index: 0; }
         .container { position: relative; z-index: 1; display: flex; flex-direction: column; height: 100vh; }
 
@@ -96,36 +87,26 @@
         main { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
         .page { display: none; width: 100%; max-width: 1100px; animation: fadeIn 0.5s ease; }
         .page.active { display: block; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .card { background: var(--bg-glass); backdrop-filter: blur(15px); border: 1px solid var(--border-glass); border-radius: 16px; padding: 30px; text-align: center; }
-        .tagline { color: #888; margin-bottom: 20px; }
-
-        /* Projects Grid */
+        
         .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; text-align: left; margin-top: 20px; }
         .project-item { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 12px; border-left: 4px solid var(--primary); }
         .status { font-size: 0.7rem; text-transform: uppercase; color: var(--primary); font-weight: 800; }
 
-        /* Members Grid */
         .members-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin-top: 20px; }
-        .member-card { background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; border: 1px solid transparent; transition: 0.3s; }
-        .member-card:hover { border-color: var(--primary); background: rgba(255, 255, 255, 0.1); }
+        .member-card { background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; border: 1px solid transparent; }
         .member-avatar { width: 64px; height: 64px; image-rendering: pixelated; margin-bottom: 10px; border-radius: 4px; }
     </style>
 </head>
 <body>
 
     <div id="loader">
-        <div style="text-align: center;">
-            <img src="https://files.catbox.moe/dxgwys.webp" alt="Logo" class="intro-logo" id="logo-main">
-            <div id="entry-zone" style="opacity: 0; transition: opacity 1s;">
-                <button onclick="startBrewery()" class="entry-btn">ENTER BREWERY</button>
-            </div>
-        </div>
+        <img src="https://files.catbox.moe/dxgwys.webp" alt="Logo" class="intro-logo">
     </div>
 
-    <audio id="beerSound" src="https://www.myinstants.com/media/sounds/beer-can-opening-sound-effect.mp3"></audio>
+    <audio id="beerSound" src="https://www.myinstants.com/media/sounds/beer-can-opening-sound-effect.mp3" preload="auto"></audio>
 
     <div class="overlay"></div>
 
@@ -145,8 +126,7 @@
             <section id="home" class="page">
                 <div class="card">
                     <h1>Brewery Inc</h1>
-                    <div class="tagline">The best beer makers on Downriver</div>
-                    <div id="player-status" style="font-size: 1.5rem; font-weight: 800; color: var(--primary); margin: 20px 0;">Loading Server Info...</div>
+                    <div id="player-status" style="font-size: 1.5rem; font-weight: 800; color: var(--primary); margin: 20px 0;">Pinging Server...</div>
                     <p style="font-family: monospace; color: #888;">IP: 66.59.210.161</p>
                 </div>
             </section>
@@ -154,13 +134,12 @@
             <section id="projects" class="page">
                 <div class="card">
                     <h1>Active Projects</h1>
-                    <div class="tagline">Building the future of Brewery Inc</div>
                     <div class="projects-grid">
                         <div class="project-item"><span class="status">In Progress</span><h3>Bonemeal Farm</h3><p>Automated bone blocks and fertilizer production.</p></div>
                         <div class="project-item"><span class="status">In Progress</span><h3>Snowman Farm</h3><p>Infinite snow collection systems.</p></div>
                         <div class="project-item"><span class="status">Ongoing</span><h3>Gear Distribution</h3><p>Supplying maxed-out gear to all team members.</p></div>
                         <div class="project-item"><span class="status">In Progress</span><h3>Shulker Farm</h3><p>Securing infinite storage capabilities.</p></div>
-                        <div class="project-item"><span class="status">Massive Build</span><h3>The City Itself</h3><p>The Great City yeah idk what to put in here.</p></div>
+                        <div class="project-item"><span class="status">Massive Build</span><h3>The City Itself</h3><p>The Great City.</p></div>
                     </div>
                 </div>
             </section>
@@ -168,7 +147,6 @@
             <section id="members" class="page">
                 <div class="card">
                     <h1>The Team</h1>
-                    <div class="tagline">The Members Apart Brewery Inc</div>
                     <div class="members-grid">
                         <div class="member-card"><img src="https://minotar.net/helm/returnmetokai/64.png" class="member-avatar"><h3>RMTK</h3></div>
                         <div class="member-card"><img src="https://minotar.net/helm/shynbug/64.png" class="member-avatar"><h3>shynbug</h3></div>
@@ -190,30 +168,20 @@
 
             <section id="map" class="page">
                 <div class="card" style="padding: 15px; height: 80vh; display: flex; flex-direction: column;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                         <div>
-                            <h1 style="font-size: 1.8rem; margin: 0;">Map of base</h1>
-                            <div id="real-time" style="font-size: 0.75rem; color: #888; font-family: monospace; letter-spacing: 1px;">00:00:00 AM</div>
+                            <h1 style="font-size: 1.5rem; margin: 0;">Map of base</h1>
+                            <div id="real-time" style="font-size: 0.7rem; color: #888;">00:00:00 AM</div>
                         </div>
-                        <div style="text-align: right;">
-                            <div id="server-time-display" style="font-size: 0.9rem; color: var(--primary); font-family: monospace; font-weight: 800;">SYNCING WORLD TIME...</div>
-                            <div style="font-size: 0.7rem; color: #888;">X: 3175 | Y: 64 | Z: 4071</div>
-                        </div>
+                        <div id="server-time-display" style="font-size: 0.8rem; color: var(--primary); font-family: monospace;">WORLD TIME...</div>
                     </div>
-                    <iframe 
-                        src="https://map.downriversmp.cc/?worldname=world&mapname=flat&zoom=5&x=3175&y=64&z=4071" 
-                        style="width: 100%; flex-grow: 1; border: 1px solid var(--border-glass); border-radius: 12px; background: #0b0b0d;" 
-                        id="dynmap-frame">
-                    </iframe>
+                    <iframe src="https://map.downriversmp.cc/?worldname=world&mapname=flat&zoom=5&x=3175&y=64&z=4071" style="width: 100%; flex-grow: 1; border: 1px solid var(--border-glass); border-radius: 12px; background: #0b0b0d;"></iframe>
                 </div>
             </section>
         </main>
     </div>
 
     <script>
-        function setCookie(n, v) { document.cookie = n + "=" + v + ";path=/;max-age=604800"; }
-        function getCookie(n) { const v = document.cookie.match('(^|;) ?' + n + '=([^;]*)(;|$)'); return v ? v[2] : null; }
-
         function switchPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
@@ -221,52 +189,37 @@
             if(target) {
                 target.classList.add('active');
                 document.getElementById('btn-' + id).classList.add('active');
-                setCookie('tag', id);
             }
         }
 
-        function startBrewery() {
-            document.getElementById('beerSound').play();
-            document.getElementById('logo-main').classList.add('logo-shrink-final');
-            document.getElementById('entry-zone').style.opacity = "0";
-            setTimeout(() => { 
-                document.getElementById('loader').classList.add('loader-fade-out'); 
-            }, 1000);
-        }
-
-        function updateClocks() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            if(document.getElementById('real-time')) document.getElementById('real-time').innerText = "LOCAL TIME: " + timeString;
-
-            fetch('https://map.downriversmp.cc/standalone/dynmap_world.json')
-                .then(r => r.json())
-                .then(data => {
-                    const serverTime = data.servertime; 
-                    let hours = Math.floor((serverTime / 1000 + 6) % 24);
-                    let minutes = Math.floor((serverTime % 1000) * 60 / 1000);
-                    let ampm = hours >= 12 ? 'PM' : 'AM';
-                    hours = hours % 12 || 12;
-                    const mcClock = hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ' ' + ampm;
-                    const isNight = (serverTime > 13000 && serverTime < 23000);
-                    const status = isNight ? "🌙 NIGHT" : "☀️ DAY";
-                    const display = document.getElementById('server-time-display');
-                    if(display) {
-                        display.innerText = `IN-GAME: ${mcClock} (${status})`;
-                        display.style.color = isNight ? "#9b59b6" : "#f39c12";
-                    }
-                }).catch(() => {
-                    if(document.getElementById('server-time-display')) document.getElementById('server-time-display').innerText = "LIVE MAP ACTIVE";
-                });
-        }
-
         window.onload = () => {
-            fetch('https://api.mcsrvstat.us/3/66.59.210.161').then(r => r.json()).then(d => {
-                document.getElementById('player-status').innerText = d.online ? `ONLINE: ${d.players.online}/${d.players.max}` : "SERVER OFFLINE";
-            });
-            setTimeout(() => { document.getElementById('entry-zone').style.opacity = "1"; }, 4000);
-            switchPage(getCookie('tag') || 'home');
-            setInterval(updateClocks, 1000);
+            const loader = document.getElementById('loader');
+            const audio = document.getElementById('beerSound');
+
+            // 1. Try to play sound (if browser allows)
+            audio.play().catch(() => console.log("Sound ready for interaction"));
+
+            // 2. Wait 6 seconds for animation, then vanish
+            setTimeout(() => {
+                loader.classList.add('loader-fade-out');
+            }, 6000);
+
+            // Server Ping
+            fetch('https://api.mcsrvstat.us/3/66.59.210.161')
+                .then(r => r.json()).then(d => {
+                    document.getElementById('player-status').innerText = d.online ? `${d.players.online} Players Online` : "Offline";
+                });
+
+            // Restore last page
+            const lastTag = document.cookie.split('; ').find(row => row.startsWith('tag='))?.split('=')[1] || 'home';
+            switchPage(lastTag);
+
+            // Clocks
+            setInterval(() => {
+                const now = new Date();
+                if(document.getElementById('real-time')) 
+                    document.getElementById('real-time').innerText = "LOCAL: " + now.toLocaleTimeString();
+            }, 1000);
         };
     </script>
 </body>
