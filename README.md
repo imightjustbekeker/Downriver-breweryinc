@@ -27,11 +27,11 @@ This repository contains the source code for our advanced, glassmorphism-style o
 
 ## 🏗️ Active Projects
 
-1.  **Bonemeal Farm** - Massive fertilizer production.
-2.  **Snowman Farm** - Infinite snow resource collection.
-3.  **Gear Distribution** - Ensuring all members have maxed-out kits.
+1.  **Bonemeal Farm** - idk what this is for.
+2.  **Snowman Farm** - snow ig.
+3.  **Gear Distribution** - Ensuring all members have maxed out gear.
 4.  **Shulker Farm** - Advanced storage solutions.
-5.  **The City** - Our primary metropolitan hub.
+5.  **The City** - i live here.
 
 ---
 
