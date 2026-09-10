@@ -206,10 +206,10 @@
             const loader = document.getElementById('loader');
             const audio = document.getElementById('beerSound');
 
-            // 1. Try to play sound (if browser allows)
+            // play sound 
             audio.play().catch(() => console.log("Sound ready for interaction"));
 
-            // 2. Wait 6 seconds for animation, then vanish
+            // 2. Wait 6s for anim then vanish ( revamp needed )
             setTimeout(() => {
                 loader.classList.add('loader-fade-out');
             }, 6000);
@@ -220,11 +220,11 @@
                     document.getElementById('player-status').innerText = d.online ? `${d.players.online} Players Online` : "Offline";
                 });
 
-            // Restore last page
+            // Restore last page revamp needed
             const lastTag = document.cookie.split('; ').find(row => row.startsWith('tag='))?.split('=')[1] || 'home';
             switchPage(lastTag);
 
-            // Clocks
+            // Clocks ticking ong
             setInterval(() => {
                 const now = new Date();
                 if(document.getElementById('real-time')) 
